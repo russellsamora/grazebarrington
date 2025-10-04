@@ -3,24 +3,19 @@
 	import { browser } from "$app/environment";
 	import Meta from "$components/Meta.svelte";
 	import Index from "$components/Index.svelte";
-	import copy from "$data/copy.json";
 	import version from "$utils/version.js";
 
 	let { data } = $props();
 
 	version();
 
-	const preloadFont = [
-		"https://pudding.cool/assets/fonts/tiempos/TiemposTextWeb-Regular.woff2",
-		"https://pudding.cool/assets/fonts/tiempos/TiemposTextWeb-Bold.woff2",
-		"https://pudding.cool/assets/fonts/atlas/AtlasGrotesk-Regular-Web.woff2",
-		"https://pudding.cool/assets/fonts/atlas/AtlasGrotesk-Bold-Web.woff2"
-	];
-
-	const { title, description, url, keywords } = copy;
-	setContext("copy", copy);
+	const title = "graze barrington";
+	const description =
+		"eating the most popular item at every food establishment in great barrington";
+	const url = "https://grazebarrington.com";
+	const keywords = "great barrington, food, eating, massachusetts, ma";
 	setContext("data", data);
 </script>
 
-<Meta {title} {description} {url} {preloadFont} {keywords} />
+<Meta {title} {description} {url} {keywords} />
 <Index />

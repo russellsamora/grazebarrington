@@ -1,31 +1,20 @@
-<script>
-	// shadow, plain, line, bubble
-	import wordmark from "$svg/wordmark-shadow.svg";
-</script>
-
 <header>
-	<div class="wordmark">
-		<a href="https://pudding.cool" aria-label="The Pudding" target="_self"
-			>{@html wordmark}</a
-		>
-	</div>
+	<img src="assets/logo.png" alt="graze barrington logo" />
+
+	<h1>graze barrington</h1>
+
+	<p>
+		eating the most popular item at every food establishment in great barrington
+	</p>
 </header>
 
 <style>
-	.wordmark {
-		max-width: 14em;
+	header {
+		max-width: var(--col-width);
 		margin: 0 auto;
-		padding: 32px 0;
-		transform: rotate(-4deg);
 	}
 
-	.wordmark a {
-		border: none;
-		display: block;
-		color: var(--color-fg);
-	}
-
-	.wordmark a:hover {
-		background-color: transparent;
+	h1 {
+		margin: 0 auto;
 	}
 </style>

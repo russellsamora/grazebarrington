@@ -1,13 +1,12 @@
 @import "variables.css";
 @import "normalize.css";
-@import "font.css";
 @import "reset.css";
 
 /* colors defined in variables.css */
 :root {
 	/* font */
-	--sans: "Atlas Grotesk", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-	--serif: "Tiempos Text", Iowan Old Style, Times New Roman, Times, serif;
+	--sans: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+	--serif: Iowan Old Style, Times New Roman, Times, serif;
 	--mono: Menlo, Consolas, Monaco, monospace;
 
 	/* z-index */
@@ -18,15 +17,15 @@
 
 	/* presets (used in reset.css) */
 	--border-radius: 2px;
-	--font-body: var(--serif);
-	--font-form: var(--sans);
+	--font-body: var(--mono);
+	--font-form: var(--mono);
 	--color-bg: var(--color-white);
 	--color-fg: var(--color-gray-900);
 	--color-primary: var(--color-black);
 	--color-link: var(--color-black);
 	--color-link-hover: var(--color-black);
-	--color-focus: var(--color-red);
-	--color-mark: var(--color-yellow);
+	--color-focus: var(--color-black);
+	--color-mark: var(--color-gray-100);
 	--color-selection: var(--color-gray-300);
 	--color-border: var(--color-gray-300);
 	--color-button-bg: var(--color-gray-300);
@@ -38,6 +37,8 @@
 
 	/* "1" second duration */
 	--1s: 1ms;
+	
+	--col-width: 400px;
 }
 
 /* dark theme */
@@ -53,32 +54,12 @@
 	}
 }
 
-h1 {
-	font-size: var(--48px, 48px);
-}
-
-h2 {
-	font-size: var(--36px, 36px);
-}
-
-h3 {
-	font-size: var(--28px, 28px);
-}
-
-h4 {
-	font-size: var(--24px, 24px);
-}
-
-h5 {
-	font-size: var(--22px, 22px);
-}
-
-h6 {
-	font-size: var(--20px, 20px);
-}
-
 svg {
 	display: block;
 	width: 100%;
 	height: auto;
+}
+
+main {
+	padding: 16px;
 }
