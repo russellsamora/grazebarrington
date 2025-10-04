@@ -33,24 +33,21 @@
 		{@const src = `assets/${img}@2x.jpg`}
 		{@const price = format("$,.2f")(p.cost)}
 		{@const hide = !!p.hide}
-		<div class="item" class:hide>
+		<div class="place" class:hide>
 			<h2>
 				{p.name}{#if p.name_note}<span>{p.name_note}</span>{/if}
 			</h2>
-			<img {src} alt={"Image of " + p.item} />
-			<p>
-				<!-- <strong>item: </strong> -->
+			<img {src} alt={p.item} />
+			<p class="item">
 				<strong>{p.item}</strong>
-				<span>{price}</span>
+				<span class="price">{price}</span>
 			</p>
-			<!-- <p><strong>price:</strong> {price}</p> -->
 			{#if p.notes}
 				<p class="notes">
-					<!-- <strong>notes:</strong> -->
 					{p.notes}
 				</p>
 			{/if}
-			<p><strong>return visit?</strong> {p.return}</p>
+			<p class="return"><strong>return visit?</strong> {p.return}</p>
 		</div>
 	{/each}
 </section>
@@ -75,7 +72,7 @@
 		margin: 0 auto;
 	}
 
-	.item {
+	.place {
 		margin: 48px auto;
 		padding-bottom: 16px;
 		border-bottom: 1px dashed var(--color-border);
