@@ -11,7 +11,7 @@
 
 	const title = "graze barrington";
 	const description =
-		"eating the most popular item at every food establishment in great barrington";
+		"trying the most popular item at every food establishment in great barrington";
 	const url = "https://grazebarrington.com";
 	const keywords = "great barrington, food, eating, massachusetts, ma";
 	setContext("data", data);
