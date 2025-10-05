@@ -1,7 +1,21 @@
 <script>
 	import { getContext } from "svelte";
-	import { format } from "d3";
+	import { format, ascending, descending } from "d3";
+	import CalendarDays from "@lucide/svelte/icons/calendar-days";
+	import ArrowDownAZ from "@lucide/svelte/icons/arrow-down-a-z";
 	const data = getContext("data");
+
+	let places = $state(data.places);
+
+	function sortAlpha() {
+		places.sort((a, b) => ascending(a.name, b.name));
+		places = [...places];
+	}
+
+	function sortDate() {
+		places.sort((a, b) => descending(a.date, b.date));
+		places = [...places];
+	}
 </script>
 
 <header>
@@ -24,8 +38,16 @@
 	</details>
 </header>
 
+<div class="ui">
+	<button onclick={sortDate}>
+		<CalendarDays /> sort by newest
+	</button>
+	<button onclick={sortAlpha}>
+		<ArrowDownAZ /> sort by name
+	</button>
+</div>
 <section id="places">
-	{#each data.places as p, i}
+	{#each places as p (p.name)}
 		{@const img = p.name.replace(/\W/g, "").toLowerCase()}
 		{@const src = `assets/${img}@2x.jpg`}
 		{@const price = format("$,.2f")(p.cost)}
@@ -70,8 +92,9 @@
 	}
 
 	.place {
-		margin: 48px auto;
 		padding-bottom: 16px;
+		margin-bottom: 48px;
+		margin-top: 32px;
 		border-bottom: 1px dashed var(--color-border);
 	}
 
@@ -108,5 +131,26 @@
 
 	summary {
 		color: var(--color-gray-600);
+	}
+
+	.ui {
+		display: flex;
+		gap: 8px;
+		margin: 32px auto;
+		max-width: var(--col-width);
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		font-size: 14px;
+		flex: 1;
+		border: 1px solid var(--color-border);
+		justify-content: center;
+	}
+
+	:global(.ui button svg) {
+		width: 1.5em;
+		margin-right: 8px;
 	}
 </style>
