@@ -52,9 +52,12 @@
 		{@const src = `assets/${img}@2x.jpg`}
 		{@const price = format("$,.2f")(p.cost)}
 		{@const hide = !!p.hide}
+		{@const the = p.name_note === "The"}
 		<div class="place" class:hide>
 			<h2>
-				{p.name}{#if p.name_note}<span>{p.name_note}</span>{/if}
+				{the ? "The" : ""}{p.name}{#if p.name_note && !the}<span
+						>{p.name_note}</span
+					>{/if}
 			</h2>
 			<img {src} alt={p.item} />
 			<p class="item">
