@@ -8,7 +8,9 @@
 	let places = $state(data.places);
 
 	function sortAlpha() {
-		places.sort((a, b) => ascending(a.name, b.name));
+		places.sort((a, b) =>
+			ascending(a.name.toLowerCase(), b.name.toLowerCase())
+		);
 		places = [...places];
 	}
 
