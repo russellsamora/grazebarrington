@@ -6,8 +6,10 @@
 	const data = getContext("data");
 
 	let places = $state(data.places);
+	let current = $state("date");
 
 	function sortAlpha() {
+		current = "alpha";
 		places.sort((a, b) =>
 			ascending(a.name.toLowerCase(), b.name.toLowerCase())
 		);
@@ -15,6 +17,7 @@
 	}
 
 	function sortDate() {
+		current = "date";
 		places.sort((a, b) => descending(a.date, b.date));
 		places = [...places];
 	}
@@ -41,10 +44,10 @@
 </header>
 
 <div class="ui">
-	<button onclick={sortDate}>
+	<button onclick={sortDate} class:active={current === "date"}>
 		<CalendarDays /> sort by newest
 	</button>
-	<button onclick={sortAlpha}>
+	<button onclick={sortAlpha} class:active={current === "alpha"}>
 		<ArrowDownAZ /> sort by name
 	</button>
 </div>
@@ -152,6 +155,10 @@
 		flex: 1;
 		border: 1px solid var(--color-border);
 		justify-content: center;
+	}
+
+	button.active {
+		background: var(--color-gray-100);
 	}
 
 	:global(.ui button svg) {
