@@ -9,3 +9,7 @@ github:
 	git commit -m "update github pages"
 	git push
 
+update:
+	npm run gdoc
+	npm run build
+	make github
