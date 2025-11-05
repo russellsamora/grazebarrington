@@ -31,6 +31,13 @@
 	<p>
 		trying the most popular item at every food establishment in great barrington
 	</p>
+
+	<p class="merch">
+		<a href="https://cottonbureau.com/people/sad-lunch-break" target="_blank"
+			>merch!<br /></a
+		>
+		<span><small><sup>*</sup>nobody asked for</small></span>
+	</p>
 	<details>
 		<summary>about</summary>
 		<p>to qualify, a place must:</p>
@@ -164,5 +171,13 @@
 	:global(.ui button svg) {
 		width: 1.5em;
 		margin-right: 8px;
+	}
+
+	p.merch {
+		position: absolute;
+		top: 8px;
+		right: 16px;
+		text-align: right;
+		font-size: 14px;
 	}
 </style>

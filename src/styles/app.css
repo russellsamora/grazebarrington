@@ -16,13 +16,14 @@
 	--z-overlay: 1000;
 
 	/* presets (used in reset.css) */
+	--color-pink: #e70068;
 	--border-radius: 2px;
 	--font-body: var(--mono);
 	--font-form: var(--mono);
 	--color-bg: var(--color-white);
 	--color-fg: var(--color-gray-900);
 	--color-primary: var(--color-black);
-	--color-link: var(--color-black);
+	--color-link: var(--color-pink);
 	--color-link-hover: var(--color-black);
 	--color-focus: var(--color-black);
 	--color-mark: var(--color-gray-100);
