@@ -46,7 +46,7 @@
 			<li>prepare food on site</li>
 			<li>offer a savory meal</li>
 		</ul>
-		<p>at the time of writing, this yields approximately 75 places in town.</p>
+		<p>at the time of writing, this yields approximately 70 places in town.</p>
 	</details>
 </header>
 
