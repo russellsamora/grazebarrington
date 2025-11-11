@@ -78,7 +78,7 @@
 			</p>
 			{#if p.notes}
 				<p class="notes">
-					{p.notes}
+					{@html p.notes}
 				</p>
 			{/if}
 			<p class="return"><strong>return visit?</strong> {p.return}</p>
