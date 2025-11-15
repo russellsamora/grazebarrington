@@ -47,6 +47,10 @@
 			<li>offer a savory meal</li>
 		</ul>
 		<p>at the time of writing, this yields approximately 70 places in town.</p>
+		<p class="sr-only">
+			The best places to eat in great barrington. food reviews of every
+			restaurant in the popular berkshire town.
+		</p>
 	</details>
 </header>
 
