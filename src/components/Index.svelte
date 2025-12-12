@@ -2,11 +2,12 @@
 	import { getContext } from "svelte";
 	import { format, ascending, descending } from "d3";
 	import CalendarDays from "@lucide/svelte/icons/calendar-days";
+	import Trophy from "@lucide/svelte/icons/trophy";
 	import ArrowDownAZ from "@lucide/svelte/icons/arrow-down-a-z";
 	const data = getContext("data");
 
 	let places = $state(data.places);
-	let current = $state("date");
+	let current = $state("return");
 
 	function sortAlpha() {
 		current = "alpha";
@@ -21,6 +22,15 @@
 		places.sort((a, b) => descending(a.date, b.date));
 		places = [...places];
 	}
+
+	function sortReturn() {
+		current = "return";
+		// yes = 3, maybe = 2, no = 1
+		const rank = { yes: 3, maybe: 2, no: 1 };
+		places.sort((a, b) => descending(rank[a.return], rank[b.return]));
+
+		places = [...places];
+	}
 </script>
 
 <header>
@@ -29,7 +39,8 @@
 	<h1>graze barrington</h1>
 
 	<p>
-		trying the most popular item at every food establishment in great barrington
+		i tried the most popular item at every food establishment in great
+		barrington in 2025. 70 places reviewed in total.
 	</p>
 
 	<p class="merch">
@@ -38,25 +49,15 @@
 		>
 		<span><small><sup>*</sup>nobody asked for</small></span>
 	</p>
-	<details>
-		<summary>about</summary>
-		<p>to qualify, a place must:</p>
-		<ul>
-			<li>sell to the public</li>
-			<li>prepare food on site</li>
-			<li>offer a savory meal</li>
-		</ul>
-		<p>at the time of writing, this yields approximately 70 places in town.</p>
-		<p class="sr-only">
-			The best places to eat in great barrington. food reviews of every
-			restaurant in the popular berkshire town.
-		</p>
-	</details>
+	<p class="sr-only">
+		The best places to eat in great barrington. food reviews of every restaurant
+		in the popular berkshire town.
+	</p>
 </header>
 
 <div class="ui">
-	<button onclick={sortDate} class:active={current === "date"}>
-		<CalendarDays /> sort by newest
+	<button onclick={sortReturn} class:active={current === "return"}>
+		<Trophy /> sort by tiers
 	</button>
 	<button onclick={sortAlpha} class:active={current === "alpha"}>
 		<ArrowDownAZ /> sort by name
@@ -69,7 +70,7 @@
 		{@const price = format("$,.2f")(p.cost)}
 		{@const hide = !!p.hide}
 		{@const the = p.name_note === "The"}
-		<div class="place" class:hide>
+		<div class="place return-{p.return}" class:hide>
 			<h2>
 				{the ? "The " : ""}{p.name}{#if p.name_note && !the}<span
 						>{p.name_note}</span
@@ -110,12 +111,36 @@
 		margin: 0 auto;
 	}
 
+	#places {
+		max-width: none;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
 	.place {
-		padding-bottom: 16px;
+		/* padding-bottom: 16px;
 		margin-bottom: 48px;
 		margin-top: 32px;
-		border-bottom: 1px dashed var(--color-border);
+		border-bottom: 1px dashed var(--color-border); */
+		width: 10%;
+		border: 1px solid var(--color-bg);
 	}
+
+	/* .place img {
+		filter: grayscale(0.5);
+	} */
+
+	/* .return-yes {
+		border-color: green;
+	}
+
+	.return-maybe {
+		border-color: yellow;
+	}
+
+	.return-no {
+		border-color: red;
+	} */
 
 	.hide {
 		display: none;
@@ -124,6 +149,11 @@
 	h2 {
 		line-height: 1.2;
 		text-transform: lowercase;
+		display: none;
+	}
+
+	.place p {
+		display: none;
 	}
 
 	h2 span {
@@ -140,16 +170,9 @@
 		color: var(--color-gray-600);
 	}
 
-	img {
-		margin: 16px auto;
-	}
-
-	details {
-		cursor: pointer;
-	}
-
-	summary {
-		color: var(--color-gray-600);
+	.places img {
+		display: none;
+		/* margin: 16px auto; */
 	}
 
 	.ui {
@@ -183,5 +206,9 @@
 		right: 16px;
 		text-align: right;
 		font-size: 14px;
+	}
+
+	header img {
+		margin: 16px auto;
 	}
 </style>
