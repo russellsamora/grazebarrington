@@ -40,7 +40,7 @@
 
 	<p>
 		i tried the most popular item at every food establishment in great
-		barrington in 2025. 70 places reviewed in total.
+		barrington in 2025. 72 places reviewed in total.
 	</p>
 
 	<p class="merch">
