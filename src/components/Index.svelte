@@ -1,26 +1,49 @@
 <script>
 	import { getContext } from "svelte";
-	import { format, ascending, descending } from "d3";
+	import { format, ascending, descending, groups } from "d3";
 	import CalendarDays from "@lucide/svelte/icons/calendar-days";
+	import Trophy from "@lucide/svelte/icons/trophy";
 	import ArrowDownAZ from "@lucide/svelte/icons/arrow-down-a-z";
 	const data = getContext("data");
 
-	let places = $state(data.places);
-	let current = $state("date");
+	const places = [...data.places];
+	let byGroup = $state([["", [...data.places]]]);
+	let current = $state("tier");
 
 	function sortAlpha() {
 		current = "alpha";
-		places.sort((a, b) =>
-			ascending(a.name.toLowerCase(), b.name.toLowerCase())
-		);
-		places = [...places];
+		const temp = [...places];
+		temp.sort((a, b) => ascending(a.name.toLowerCase(), b.name.toLowerCase()));
+		byGroup = [["", temp]];
 	}
 
-	function sortDate() {
-		current = "date";
-		places.sort((a, b) => descending(a.date, b.date));
-		places = [...places];
+	// function sortDate() {
+	// 	current = "date";
+	// 	places.sort((a, b) => descending(a.date, b.date));
+	// 	places = [...places];
+	// }
+
+	function sortTier() {
+		current = "tier";
+		// yes = 3, maybe = 2, no = 1
+		const rank = { yes: 3, maybe: 2, no: 1 };
+		const temp = [...places];
+		temp.sort((a, b) => descending(rank[a.return], rank[b.return]));
+		const grouped = groups(temp, (d) => d.return);
+		grouped.sort((a, b) => descending(rank[a[0]], rank[b[0]]));
+		byGroup = grouped;
 	}
+
+	function lookup(name) {
+		if (name === "yes") return "will definitely";
+		if (name === "maybe") return "might";
+		if (name === "no") return "probably won't";
+		return "";
+	}
+
+	$effect(() => {
+		sortTier();
+	});
 </script>
 
 <header>
@@ -29,7 +52,8 @@
 	<h1>graze barrington</h1>
 
 	<p>
-		trying the most popular item at every food establishment in great barrington
+		in 2025, i tried the most popular item at every food establishment in great
+		barrington. here are the 71 places i reviewed.
 	</p>
 
 	<p class="merch">
@@ -38,54 +62,53 @@
 		>
 		<span><small><sup>*</sup>nobody asked for</small></span>
 	</p>
-	<details>
-		<summary>about</summary>
-		<p>to qualify, a place must:</p>
-		<ul>
-			<li>sell to the public</li>
-			<li>prepare food on site</li>
-			<li>offer a savory meal</li>
-		</ul>
-		<p>at the time of writing, this yields approximately 70 places in town.</p>
-		<p class="sr-only">
-			The best places to eat in great barrington. food reviews of every
-			restaurant in the popular berkshire town.
-		</p>
-	</details>
+	<p class="sr-only">
+		The best places to eat in great barrington. food reviews of every restaurant
+		in the popular berkshire town.
+	</p>
 </header>
 
 <div class="ui">
-	<button onclick={sortDate} class:active={current === "date"}>
-		<CalendarDays /> sort by newest
+	<button onclick={sortTier} class:active={current === "tier"}>
+		<Trophy /> tiers
 	</button>
 	<button onclick={sortAlpha} class:active={current === "alpha"}>
-		<ArrowDownAZ /> sort by name
+		<ArrowDownAZ /> reviews
 	</button>
 </div>
-<section id="places">
-	{#each places as p (p.name)}
-		{@const img = p.name.replace(/\W/g, "").toLowerCase()}
-		{@const src = `assets/${img}@2x.jpg`}
-		{@const price = format("$,.2f")(p.cost)}
-		{@const hide = !!p.hide}
-		{@const the = p.name_note === "The"}
-		<div class="place" class:hide>
-			<h2>
-				{the ? "The " : ""}{p.name}{#if p.name_note && !the}<span
-						>{p.name_note}</span
-					>{/if}
-			</h2>
-			<img {src} alt={p.item} />
-			<p class="item">
-				<strong>{p.item}</strong>
-				<span class="price">{price}</span>
-			</p>
-			{#if p.notes}
-				<p class="notes">
-					{@html p.notes}
-				</p>
-			{/if}
-			<p class="return"><strong>return visit?</strong> {p.return}</p>
+<section id="places" class:tier={current === "tier"}>
+	{#each byGroup as g}
+		{@const name = g[0]}
+		{@const places = g[1]}
+		<div class="g">
+			{#if name}<h2>places i {lookup(name)} eat at again</h2>{/if}
+			<div class="g-places">
+				{#each places as p (p.name)}
+					{@const img = p.name.replace(/\W/g, "").toLowerCase()}
+					{@const src = `assets/${img}@2x.jpg`}
+					{@const price = format("$,.2f")(p.cost)}
+					{@const hide = !!p.hide}
+					{@const the = p.name_note === "The"}
+					<div class="place return-{p.return}" class:hide>
+						<h3 class={current === "tier" ? "text-outline" : ""}>
+							{the ? "The " : ""}{p.name}{#if p.name_note && !the}<span
+									>{p.name_note}</span
+								>{/if}
+						</h3>
+						<img {src} alt={p.item} />
+						<p class="item">
+							<strong>{p.item}</strong>
+							<span class="price">{price}</span>
+						</p>
+						{#if p.notes}
+							<p class="notes">
+								{@html p.notes}
+							</p>
+						{/if}
+						<p class="return"><strong>return visit?</strong> {p.return}</p>
+					</div>
+				{/each}
+			</div>
 		</div>
 	{/each}
 </section>
@@ -110,12 +133,53 @@
 		margin: 0 auto;
 	}
 
+	#places {
+		max-width: var(--col-width);
+		margin: 0 auto;
+	}
+
+	#places.tier {
+		max-width: 1200px;
+	}
+
+	.tier .g {
+		margin-bottom: 48px;
+	}
+
+	.g-places {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
 	.place {
 		padding-bottom: 16px;
-		margin-bottom: 48px;
 		margin-top: 32px;
 		border-bottom: 1px dashed var(--color-border);
 	}
+
+	.tier .place {
+		padding: 0;
+		margin: 0;
+		border: none;
+		width: 12.5%;
+		outline: 2px solid var(--color-bg);
+	}
+
+	/* .place img {
+		filter: grayscale(0.5);
+	} */
+
+	/* .return-yes {
+		border-color: green;
+	}
+
+	.return-maybe {
+		border-color: yellow;
+	}
+
+	.return-no {
+		border-color: red;
+	} */
 
 	.hide {
 		display: none;
@@ -126,7 +190,42 @@
 		text-transform: lowercase;
 	}
 
-	h2 span {
+	h3 {
+		line-height: 1.2;
+		text-transform: lowercase;
+	}
+
+	.tier h3 {
+		font-size: 14px;
+		margin: 0;
+		padding: 6px;
+		line-height: 1;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		color: var(--color-bg);
+		--color-text-outline: var(--color-fg);
+		font-weight: bold;
+		user-select: none;
+	}
+
+	.tier h3 span {
+		display: none;
+	}
+
+	.tier .place {
+		display: flex;
+		flex-direction: column-reverse;
+		justify-content: flex-end;
+		position: relative;
+	}
+
+	.tier .place p {
+		display: none;
+	}
+
+	h3 span {
 		font-size: 0.75em;
 		display: block;
 		color: var(--color-gray-600);
@@ -140,16 +239,12 @@
 		color: var(--color-gray-600);
 	}
 
-	img {
+	.places img {
 		margin: 16px auto;
 	}
 
-	details {
-		cursor: pointer;
-	}
-
-	summary {
-		color: var(--color-gray-600);
+	.tier .places img {
+		display: none;
 	}
 
 	.ui {
@@ -183,5 +278,39 @@
 		right: 16px;
 		text-align: right;
 		font-size: 14px;
+	}
+
+	header img {
+		margin: 16px auto;
+	}
+
+	@media (max-width: 1200px) {
+		.tier .place {
+			width: 16.66%;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.tier .place {
+			width: 20%;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.tier .place {
+			width: 25%;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.tier .place {
+			width: 33.33%;
+		}
+	}
+
+	@media (max-width: 400px) {
+		.tier .place {
+			width: 50%;
+		}
 	}
 </style>
